@@ -38,7 +38,7 @@ namespace IndustrRazvlProj.Characters.Movement
         /// <param name="direction">Positive values ​​= forward. Negative values ​​= back.</param>
         private void Move(float direction)
         {
-            _rb.velocity = Vector2.up * direction * _movementSpeed;
+            _rb.velocity = transform.TransformDirection(Vector3.up) * direction * _movementSpeed;
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace IndustrRazvlProj.Characters.Movement
         /// <param name="direction">Positive values ​​= right. Negative values ​​= left.</param>
         private void SidewayMovement(float direction)
         {
-            _rb.velocity = Vector2.right * direction * _sideSpeed;
+            _rb.velocity = transform.TransformDirection(Vector3.right) * direction * _sideSpeed;
         }
     }
 }
