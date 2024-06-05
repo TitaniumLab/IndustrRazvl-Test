@@ -1,7 +1,8 @@
-using UnityEngine;
-
 namespace IndustrRazvlProj.Characters.StateMachines
 {
+    /// <summary>
+    /// Parent of enemy states
+    /// </summary>
     public class EnemyState
     {
         protected Enemy _enemy;

@@ -11,21 +11,20 @@ namespace IndustrRazvlProj.Characters
         // Route parameters
         [field: Header("Route parameters")]
         [SerializeField] private Transform _routeParent; // Parent of route points
+        public List<Transform> RoutePoints { get; private set; } = new List<Transform>(); // All route points
         [SerializeField] private ContactFilter2D _obstacleFilter;
-        [field: SerializeField] public float MovementAccuracy { get; private set; }
-        private float _moveInputValue = 1;
-        public List<Transform> RoutePoints { get; private set; } = new List<Transform>();
-        [SerializeField] private float _obstacleAvoidRadius = 0.5f;
+        [field: SerializeField] public float MovementAccuracy { get; private set; } // Destination visibility angle
+        private float _moveInputValue = 1; // Value to send in OnMove event
+        [SerializeField] private float _obstacleAvoidRadius = 0.5f; // Radius of sphere on SphereCast. Should use collider radius
         [field: SerializeField] public int CurrentPointIndex { get; private set; }
-        [field: SerializeField] public float DistanceToStop { get; private set; } = 0.1f;
+        [field: SerializeField] public float DistanceToStop { get; private set; } = 0.1f; // Distance from route point to stop
         [field: SerializeField] public float IdolTime { get; private set; } // Waiting time at route point
         // Attack parameters 
         [field: Header("Attack parameters")]
         [SerializeField] private CharacterFactions _targetFaction;
-        [field: SerializeField] public float AttackAccuracy { get; private set; } = 2;
+        [field: SerializeField] public float AttackAccuracy { get; private set; } = 2; // Target visibility angle
         [field: SerializeField] public bool IsAttacking { get; private set; }
         [field: SerializeField] public Transform CurrentTargetTransform { get; private set; }
-        [field: SerializeField] public Vector3 AgroPos { get; private set; } // Position to move when seeing an enemy
         // Trigger areas
         [field: Header("Trigger areas")]
         [SerializeField] private ChaseTriggerArea _chaseTriggerArea;
@@ -36,20 +35,11 @@ namespace IndustrRazvlProj.Characters
         public EnemyPatrolState PatrolState { get; private set; }
         public EnemyChaseState ChaseState { get; private set; }
         public EnemyAttackState AttackState { get; private set; }
-        // Internal events
-        //public event Action OnChaseStart;
-        //public event Action OnChaseStop;
-        //public event Action OnAttackStart;
-        //public event Action OnAttackStop;
         // Interfaces events
         public event Action<float> OnMove;
         public event Action<float> OnSidewayMovement;
         public event Action<float> OnRotation;
         public event Action OnFire;
-
-
-
-
 
         #region MonoBeh
         private void Awake()
@@ -81,7 +71,7 @@ namespace IndustrRazvlProj.Characters
         }
 
 
-        private void Update()
+        private void Update() // Update method is used due to delta time
         {
             StateMachine.CurrentState.LogicUpdate();
             StateMachine.CurrentState.BehaviorUpdate();
@@ -91,6 +81,9 @@ namespace IndustrRazvlProj.Characters
         {
             _chaseTriggerArea.OnTriggetEnter -= SetTarget;
             _chaseTriggerArea.OnTriggetExit -= RemoveTarget;
+
+            _attackTriggerArea.OnTriggetEnter -= EnableAttack;
+            _attackTriggerArea.OnTriggetExit -= DisableAttack;
         }
         #endregion
 
@@ -113,6 +106,7 @@ namespace IndustrRazvlProj.Characters
 
         public void SetTarget(IDamagable damagable, Transform targetTransform)
         {
+            // If the target belongs to the faction
             if (damagable.ÑharacterFaction == _targetFaction)
             {
                 CurrentTargetTransform = targetTransform;
@@ -145,14 +139,6 @@ namespace IndustrRazvlProj.Characters
             return true;
         }
 
-        //private void DisableEnemyChase(Transform targetTransform)
-        //{
-        //    if (targetTransform = CurrentTargetTransform)
-        //    {
-        //        CurrentTargetTransform = null;
-        //    }
-        //}
-
         private void EnableAttack(Transform targetTransform)
         {
             if (CurrentTargetTransform == targetTransform)
@@ -164,11 +150,6 @@ namespace IndustrRazvlProj.Characters
             if (CurrentTargetTransform == targetTransform)
                 IsAttacking = false;
         }
-
-        //public void Agro(Vector3 agroPos)
-        //{
-        //    AgroPos = agroPos;
-        //}
 
         public void ToNextRoutePoint()
         {

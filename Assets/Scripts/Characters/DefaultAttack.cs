@@ -10,7 +10,7 @@ namespace IndustrRazvlProj.Characters.Attack
         [SerializeField] private Transform _shootingPoint;
         [SerializeField] private Transform _parentTransform;
         [SerializeField] private Transform _projPrefab;
-       [SerializeField] private float _attackSpeed;
+        [SerializeField] private float _attackSpeed;
         [SerializeField] private float _projSpeed;
         [SerializeField] private float _projDuration;
         [SerializeField] private int _projDamage;
@@ -36,6 +36,7 @@ namespace IndustrRazvlProj.Characters.Attack
 
         private void Fire()
         {
+            // Attack cooldown
             if (Time.time >= _nextShotTime)
             {
                 _nextShotTime = Time.time + 1 / _attackSpeed;

@@ -22,7 +22,10 @@ namespace IndustrRazvlProj.Pools
 
         public void Release(Projectile proj)
         {
-            _pool.Release(proj);
+            if (proj.enabled)
+            {
+                _pool.Release(proj);
+            }
         }
 
         private Projectile CreateProjectile()
@@ -32,7 +35,8 @@ namespace IndustrRazvlProj.Pools
         }
 
         private void GetUnit(Projectile proj) =>
-            proj.gameObject.SetActive(true);
+                proj.gameObject.SetActive(true);
+
 
         private void ReleaseUnit(Projectile proj) =>
             proj.gameObject.SetActive(false);

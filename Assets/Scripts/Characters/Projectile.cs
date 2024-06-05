@@ -27,12 +27,19 @@ namespace IndustrRazvlProj
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
+            // If target can take damage
             if (collision.collider.TryGetComponent(out IDamagable damagable))
             {
+                // If target faction is correct
                 if (damagable.ÑharacterFaction == _targetFaction)
+                {
                     damagable.TakeDamage(_damage);
+                }
+
                 _projectilesPool.Release(this);
             }
+
+            // Ricochet
             Vector2 direction = Vector2.Reflect(_lastDireaction.normalized, collision.contacts[0].normal);
             transform.up = direction;
             _lastDireaction = direction;
@@ -60,15 +67,12 @@ namespace IndustrRazvlProj
             while (Time.time < _endDuration)
             {
                 await Task.Yield();
-                if (this.IsDestroyed())
+                if (this.IsDestroyed() || !isActiveAndEnabled)
                 {
-                    break;
+                    return;
                 }
             }
-            if (!this.IsDestroyed())
-            {
-                _projectilesPool.Release(this);
-            }
+            _projectilesPool.Release(this);
         }
     }
 }

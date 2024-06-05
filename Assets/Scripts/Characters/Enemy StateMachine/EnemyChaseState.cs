@@ -14,6 +14,7 @@ namespace IndustrRazvlProj.Characters.StateMachines
 
         public override void LogicUpdate()
         {
+            // If you lost target -> IdolState
             if (_enemy.CurrentTargetTransform is null)
             {
                 _stateMachine.ChangetState(_enemy.IdolState);
@@ -21,33 +22,43 @@ namespace IndustrRazvlProj.Characters.StateMachines
             else
             {
                 Vector2 direction = _enemy.CurrentTargetTransform.position - _enemy.transform.position;
+                // State of idol if the target can't be approached
                 if (!_enemy.CheckPassability(direction))
                 {
                     _stateMachine.ChangetState(_enemy.IdolState);
                 }
             }
-            if (_enemy.IsAttacking)
+            // State of Attack if target in attack radius
+            if (_enemy.IsAttacking && _enemy.CurrentTargetTransform is not null)
                 _stateMachine.ChangetState(_enemy.AttackState);
         }
 
         public override void BehaviorUpdate()
         {
-            Vector2 direction = _enemy.CurrentTargetTransform.position - _enemy.transform.position;
-            if (_enemy.CheckPassability(direction))
+            // If target in radius
+            if (_enemy.CurrentTargetTransform is not null)
             {
-                float angle = Vector2.SignedAngle(_enemy.transform.up, direction);
-                if (Math.Abs(angle) < _enemy.MovementAccuracy)
+                Vector2 direction = _enemy.CurrentTargetTransform.position - _enemy.transform.position;
+                // If can move to target
+                if (_enemy.CheckPassability(direction))
                 {
-                    _enemy.Move();
+                    float angle = Vector2.SignedAngle(_enemy.transform.up, direction);
+                    // Approach the target if it is ahead
+                    if (Math.Abs(angle) < _enemy.MovementAccuracy)
+                    {
+                        _enemy.Move();
+                    }
+                    // Otherwise turn to the target
+                    else
+                    {
+                        _enemy.Rotate(angle);
+                    }
                 }
+                // If can't move to target -> go to next point
                 else
                 {
-                    _enemy.Rotate(angle);
+                    _enemy.ToNextRoutePoint();
                 }
-            }
-            else
-            {
-                _enemy.ToNextRoutePoint();
             }
         }
     }

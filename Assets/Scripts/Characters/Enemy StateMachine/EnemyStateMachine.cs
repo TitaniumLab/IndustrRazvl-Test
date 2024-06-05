@@ -1,5 +1,8 @@
 namespace IndustrRazvlProj.Characters.StateMachines
 {
+    /// <summary>
+    /// Contains current state.
+    /// </summary>
     public class EnemyStateMachine
     {
         public EnemyState CurrentState { get; private set; }

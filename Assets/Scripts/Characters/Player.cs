@@ -43,7 +43,6 @@ namespace IndustrRazvlProj.Characters
             }
 
             // Rotate action
-
             if (_inputActions.Gameplay.Rotate.IsPressed())
             {
                 float rotation = _inputActions.Gameplay.Rotate.ReadValue<float>();
@@ -52,7 +51,9 @@ namespace IndustrRazvlProj.Characters
 
             // Fire action
             if (_inputActions.Gameplay.Fire.IsPressed())
+            {
                 OnFire?.Invoke();
+            }
         }
     }
 }

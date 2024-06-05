@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace IndustrRazvlProj.EventBus
 {
-    public class CustomEventBus : MonoBehaviour
+    public class CustomEventBus
     {
         private Dictionary<string, List<object>> _siganalCallbacks = new Dictionary<string, List<object>>();
 

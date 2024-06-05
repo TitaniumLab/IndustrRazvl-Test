@@ -27,7 +27,6 @@ namespace IndustrRazvlProj.Factories
             rb.freezeRotation = _freezRotation;
             obj.AddComponent<CircleCollider2D>();
             var proj = obj.AddComponent<Projectile>();
-            // obj.AddComponent<Rigidbody2D>();
             proj.Init(_projectilesPool);
             return proj;
         }
