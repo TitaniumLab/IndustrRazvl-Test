@@ -51,8 +51,7 @@ namespace IndustrRazvlProj.Characters
             }
 
             // Fire action
-            bool isFire = _inputActions.Gameplay.Fire.IsPressed();
-            if (isFire != false)
+            if (_inputActions.Gameplay.Fire.IsPressed())
                 OnFire?.Invoke();
         }
     }

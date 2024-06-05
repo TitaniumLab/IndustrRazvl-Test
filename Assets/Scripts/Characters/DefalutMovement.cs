@@ -47,7 +47,8 @@ namespace IndustrRazvlProj.Characters.Movement
         /// <param name="direction">Positive values ​​= right. Negative values ​​= left.</param>
         private void Rotate(float direction)
         {
-            float angle = direction * _rotationSpeed * Time.deltaTime;
+            float normDirection = direction / Math.Abs(direction);
+            float angle = normDirection * _rotationSpeed * Time.deltaTime;
             Vector3 rotateDirection = Quaternion.Euler(new Vector3(0, 0, angle)).eulerAngles;
             transform.Rotate(rotateDirection);
         }

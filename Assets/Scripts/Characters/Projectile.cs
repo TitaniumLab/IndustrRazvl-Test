@@ -1,9 +1,8 @@
 using IndustrRazvlProj.Characters;
 using IndustrRazvlProj.Pools;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
-
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace IndustrRazvlProj
@@ -16,6 +15,7 @@ namespace IndustrRazvlProj
         [SerializeField] private Vector2 _lastDireaction;
         [SerializeField] private int _damage;
         [SerializeField] private CharacterFactions _targetFaction;
+        private float _endDuration;
         private CustomProjectilesPool _projectilesPool;
         private Rigidbody2D _rb;
 
@@ -51,13 +51,24 @@ namespace IndustrRazvlProj
             _targetFaction = targerFaction;
             _lastDireaction = transform.up;
             _rb.velocity = transform.up * speed;
-            Invoke(nameof(SelfRelease), duration);
+            LifeTimer(duration);
         }
 
-        private void SelfRelease()
+        private async void LifeTimer(float duration)
         {
-            if (isActiveAndEnabled)
+            _endDuration = Time.time + duration;
+            while (Time.time < _endDuration)
+            {
+                await Task.Yield();
+                if (this.IsDestroyed())
+                {
+                    break;
+                }
+            }
+            if (!this.IsDestroyed())
+            {
                 _projectilesPool.Release(this);
+            }
         }
     }
 }

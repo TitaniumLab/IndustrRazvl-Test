@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace IndustrRazvlProj.Characters.StateMachines
 {
-    public class EnemyStateMachine 
+    public class EnemyStateMachine
     {
         public EnemyState CurrentState { get; private set; }
 
